@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="row">
+      <!--     Columna para el formulario-->    
+      <form [formGroup]="TodoForm" autocomplete="off" class="col s12 l6"> 
+          <h3 *ngIf="!editing" > Agregar Tarea </h3>
+          <h3 *ngIf="editing" > Editar Tarea </h3>
+          <br>
+          <div class="row">
+            <div class="input-field s12">
+                <input
+                  formControlName="text_todo" 
+                  placeholder="Descripcion de la tarea" 
+                  name="text_todo"
+                  type="text" 
+                  class="validate"
+                  required>
+                <label for="first_name">Tarea</label>
+            </div>
+           
+            <p *ngIf="editing" ><label>
+                <input formControlName="complete_todo" type="checkbox" />
+                <span>Completa </span>
+            </label></p>
+                
+
+            <button *ngIf="!editing"
+              (click)="saveTodo()" 
+              [disabled]="!TodoForm.valid || !TodoForm.dirty"
+              class="btn waves-effect waves-light" 
+              type="submit" name="action"> Agregar
+                <i class="material-icons right">send</i>
+              </button>
+
+              <button *ngIf="editing"
+              (click)="editItem()" 
+              [disabled]="!TodoForm.valid || !TodoForm.dirty"
+              class="btn waves-effect waves-light" 
+              type="submit" name="action"> Editar
+                <i class="material-icons right">send</i>
+              </button>
+          </div>
+          
+          <img class="hide-on-med-and-down" width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+  
+      </form>
+      
+      
+      <!-- Columna para la lista de items todo -->
+      <div class="col s12 l6">
+        <h3 > Listas de tareas </h3>
+        <h5 *ngIf="allTodos.length==0"> No hay tareas </h5> 
+        <ul class="collection">
+           
+            <li 
+              *ngFor=" let item of allTodos; let i = index" 
+              class="collection-item avatar">
+                <i *ngIf="!item.complete_todo; else uncomplete" 
+                (click)="completarTarea(item)" 
+                class="material-icons circle">check_box_outline_blank</i>
+                <ng-template #uncomplete>
+                    <i (click)="completarTarea(item)"  class="material-icons circle">check_box</i>
+                </ng-template>
+                <span (click)="editItem(item)" class="title">Tarea {{i+1}}</span>
+                <p  [ngClass]="{'tachado': item.complete_todo }" >{{ item.text_todo }}
+                <br>
+                  Creado el : {{item.create_todo| amLocal | amDateFormat: 'DD/M/YYYY HH:mm'}}
+                </p>
+                
+                <a  class="secondary-content">
+                    <i (click)="prepareToEdit(item)" class="material-icons yellow-text">edit</i>
+                  <i (click)="deleteItem(item)" class="material-icons red-text">close</i>
+                </a>
+            </li>
+        </ul>
+  
+      </div>
+    </div>
+  
+  </div>
